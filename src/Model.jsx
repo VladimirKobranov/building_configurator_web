@@ -5,24 +5,33 @@ export function Model(props) {
     const {nodes, materials} = useGLTF('/objects/Window.glb')
 
     function selectMesh(){
-        let selectedMesh = nodes.Window.geometry;
+        let selectedMesh = nodes.Window_0.geometry;
 
         if(props.name === 'Corner'){
         selectedMesh =  nodes.Corner.geometry;
-            console.log('corner selected')
         }else if( props.name === 'null'){
-            console.log('null selected')
             selectedMesh = nodes.Null.geometry;
-        }else{
-            selectedMesh = nodes.Window.geometry;
-            console.log('window selected')
+        }else if(props.name === 'Ceiling'){
+            selectedMesh = nodes.Ceiling.geometry;
+        }else if(props.name === 'Ceiling_corner'){
+         selectedMesh = nodes.Ceiling_corner.geometry;
+        }else if(props.name === 'Ceiling_cap'){
+            selectedMesh = nodes.Ceiling_cap.geometry;
+        }else {
+            if (props.name === 'Window_0') {
+                selectedMesh = nodes.Window_0.geometry;
+            } else if (props.name === 'Window_1') {
+                selectedMesh = nodes.Window_1.geometry;
+            } else if (props.name === 'Window_2') {
+                selectedMesh = nodes.Window_2.geometry;
+            }
         }
         return(selectedMesh)
     }
 
     return (
         <group {...props} dispose={null}>
-            <mesh geometry={selectMesh()} material={nodes.Window.material}/>
+            <mesh geometry={selectMesh()} material={nodes.Window_0.material}/>
             {/*<mesh geometry={meshCorner} material={nodes.Corner.material}/>*/}
         </group>
     )

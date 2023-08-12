@@ -7,13 +7,14 @@ import Controls from "./Controls";
 export const SliderContext = createContext();
 
 function ChakraInit() {
-    const [sliderValueX, setSliderValueX] = useState(3);
-    const [sliderValueY, setSliderValueY] = useState(3);
-    const [sliderValueZ, setSliderValueZ] = useState(3);
+    const [sliderValueX, setSliderValueX] = useState(5);
+    const [sliderValueY, setSliderValueY] = useState(4);
+    const [sliderValueZ, setSliderValueZ] = useState(6);
+    const [seed, setSeed] = useState(50);
 
     return (
         <ChakraProvider>
-            <SliderContext.Provider value={{sliderValueX, setSliderValueX, sliderValueY,setSliderValueY,sliderValueZ,setSliderValueZ}}>
+            <SliderContext.Provider value={{sliderValueX, setSliderValueX, sliderValueY,setSliderValueY,sliderValueZ,setSliderValueZ, seed,setSeed}}>
                 <Box w='80%' h='100%'>
                     <App/>
                 </Box>
