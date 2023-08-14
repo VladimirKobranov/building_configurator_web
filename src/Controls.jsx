@@ -19,7 +19,8 @@ function Controls() {
     function onSliderChangeZ(val) {
         setSliderValueZ(val)
     }
-    function onSliderChangeSeed(val){
+
+    function onSliderChangeSeed(val) {
         setSeed(val)
     }
 

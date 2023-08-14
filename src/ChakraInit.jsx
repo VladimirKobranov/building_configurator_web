@@ -14,7 +14,16 @@ function ChakraInit() {
 
     return (
         <ChakraProvider>
-            <SliderContext.Provider value={{sliderValueX, setSliderValueX, sliderValueY,setSliderValueY,sliderValueZ,setSliderValueZ, seed,setSeed}}>
+            <SliderContext.Provider value={{
+                sliderValueX,
+                setSliderValueX,
+                sliderValueY,
+                setSliderValueY,
+                sliderValueZ,
+                setSliderValueZ,
+                seed,
+                setSeed
+            }}>
                 <Box w='80%' h='100%'>
                     <App/>
                 </Box>

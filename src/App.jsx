@@ -1,10 +1,10 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Canvas} from '@react-three/fiber';
-import {OrbitControls, PivotControls} from '@react-three/drei';
-import {Environment} from './Environment';
+import {AccumulativeShadows, Environment, OrbitControls, PivotControls, SoftShadows} from '@react-three/drei';
 import {SliderContext} from "./ChakraInit";
 import {Model} from "./Model";
 import {degToRad} from "three/src/math/MathUtils";
+import {EffectComposer, FXAA, N8AO, SMAA, SSAO} from "@react-three/postprocessing";
 
 export default function App() {
     const [meshPositions, setMeshPositions] = useState([]);
@@ -28,12 +28,13 @@ export default function App() {
         const gridData = [];
 
         for (let x = 0.0; x < sliderValueX; x++) {
-            for (let y = 0.0; y < sliderValueY+1; y++) {
+            for (let y = 0.0; y < sliderValueY + 1; y++) {
                 for (let z = 0.0; z < sliderValueZ; z++) {
                     const position = [x * xTile - (sliderValueX - 1) * xTile / 2,
-                        y * yTile - yTile / 2,
+                        y * yTile, //- yTile / 2
                         z * zTile - (sliderValueZ - 1) * zTile / 2
                     ];
+                    if (sliderValueX === 1 || sliderValueY === 0 || sliderValueZ === 1) break;
                     let angleX = degToRad(0);
                     let angleY = degToRad(0);
                     let angleZ = degToRad(0);
@@ -41,61 +42,60 @@ export default function App() {
 
                     // main floor
                     if (x === 0 || x === sliderValueX - 1) {
-                        if(x === 0){
+                        if (x === 0) {
                             angleY = degToRad(180)
-                            if(z === 0 || z === sliderValueZ-1){
-                                if(y === sliderValueY){
+                            if (z === 0 || z === sliderValueZ - 1) {
+                                if (y === sliderValueY) {
                                     mesh = 'Ceiling_corner'
-                                }else{
+                                } else {
                                     mesh = 'Corner'
                                 }
-                                z === sliderValueZ-1 ? angleY = degToRad(270): angleY = degToRad(180)
-                            }else {
-                                if(y === sliderValueY){
+                                z === sliderValueZ - 1 ? angleY = degToRad(270) : angleY = degToRad(180)
+                            } else {
+                                if (y === sliderValueY) {
                                     mesh = 'Ceiling'
-                                }else{
+                                } else {
                                     mesh = `Window_${Math.floor(generator() * 3)}`;
                                 }
                             }
-                        }else {
+                        } else {
                             angleY = degToRad(0)
-                            if(z === 0 || z === sliderValueZ-1){
-                                if(y === sliderValueY){
+                            if (z === 0 || z === sliderValueZ - 1) {
+                                if (y === sliderValueY) {
                                     mesh = 'Ceiling_corner'
-                                }else{
+                                } else {
                                     mesh = 'Corner'
                                 }
-                                z === sliderValueZ-1 ? angleY = degToRad(0): angleY = degToRad(90)
-                            }else {
-                                if(y === sliderValueY){
+                                z === sliderValueZ - 1 ? angleY = degToRad(0) : angleY = degToRad(90)
+                            } else {
+                                if (y === sliderValueY) {
                                     mesh = 'Ceiling'
-                                }else {
+                                } else {
                                     mesh = `Window_${Math.floor(generator() * 3)}`;
                                 }
                             }
                         }
                     } else if (z === 0) {
                         angleY = degToRad(90)
-                        if(y === sliderValueY){
+                        if (y === sliderValueY) {
                             mesh = 'Ceiling'
-                        }else {
+                        } else {
                             mesh = `Window_${Math.floor(generator() * 3)}`;
                         }
                     } else if (z === sliderValueZ - 1) {
                         angleY = degToRad(270)
-                        if(y === sliderValueY){
+                        if (y === sliderValueY) {
                             mesh = 'Ceiling'
-                        }else {
+                        } else {
                             mesh = `Window_${Math.floor(generator() * 3)}`;
                         }
-                    }else {
-                        if(y === sliderValueY){
+                    } else {
+                        if (y === sliderValueY) {
                             mesh = 'Ceiling_cap'
-                        }else {
+                        } else {
                             mesh = 'null'
                         }
                     }
-
 
                     const rotation = [angleX, angleY, angleZ]
                     const gridItem = {
@@ -103,7 +103,6 @@ export default function App() {
                         rotation: rotation,
                         meshType: mesh
                     };
-
 
                     gridData.push(gridItem);
                 }
@@ -116,26 +115,71 @@ export default function App() {
         console.log("grid data: ", gridData);
     };
 
-
     useEffect(() => {
         generateGrid()
         console.log('updated')
-    }, [sliderValueX, sliderValueY, sliderValueZ,seed]);
-
+    }, [sliderValueX, sliderValueY, sliderValueZ, seed]);
 
     return (
-        <Canvas shadows camera={{position: [-55, 20, 35], fov: 25}}>
-            <color attach="background" args={['skyblue']}/>
-            <Environment/>
-            <OrbitControls makeDefault/>
+        <Canvas shadows={'soft'} camera={{position: [50, 25, -50], fov: 30}} gl={{antialias: false}}>
+            <SoftShadows samples={64} focus={2} size={1}/>
+            <color attach="background" args={["#d0d0d0"]}/>
+            <ambientLight intensity={0.3} color={'white'}/>
+            <directionalLight
+                position={[25, 25, 25]}
+                intensity={3}
+                castShadow
+                shadow-bias={0.00001}
+                shadow-mapSize-width={8128}
+                shadow-mapSize-height={8128}
+                shadow-camera-near={0.1}
+                shadow-camera-far={500}
+                shadow-camera-left={-100}
+                shadow-camera-right={100}
+                shadow-camera-top={100}
+                shadow-camera-bottom={-100}
+            />
+            <Environment preset="city"/>
+            <AccumulativeShadows temporal={true} frames={100} scale={100} position={[0, 0.01, 0]} opacity={0.5}>
+                <ambientLight intensity={0.3} color={'white'}/>
+                <directionalLight
+                    position={[25, 25, 25]}
+                    intensity={3}
+                    castShadow
+                    shadow-bias={0.00001}
+                    shadow-mapSize-width={8128}
+                    shadow-mapSize-height={8128}
+                    shadow-camera-near={0.1}
+                    shadow-camera-far={500}
+                    shadow-camera-left={-100}
+                    shadow-camera-right={100}
+                    shadow-camera-top={100}
+                    shadow-camera-bottom={-100}
+                />
+            </AccumulativeShadows>
             <PivotControls activeAxes={[true, true, true]} rotation={[0, 0, 0]} scale={3} anchor={[1, -1, 1]}>
                 {gridData.map((item, index) => (
                     <Model scale={1} key={index}
-                                 name={item.meshType}
-                                 position={item.position}
-                                 rotation={item.rotation}/>
+                           name={item.meshType}
+                           position={item.position}
+                           rotation={item.rotation}/>
                 ))}
             </PivotControls>
+            <mesh receiveShadow castShadow rotation-x={degToRad(-90)}>
+                <planeGeometry args={[100, 100]} rotate={[90, 0, 0]}/>
+                <meshLambertMaterial color="#F2F2F2"/>
+            </mesh>
+            <mesh receiveShadow castShadow position={[10, 2.5, 10]}>
+                <boxGeometry args={[5, 5, 5]}/>
+                <meshLambertMaterial color="white"/>
+            </mesh>
+            <EffectComposer multisampling={10}>
+                <N8AO fullRes color="black" aoRadius={2} intensity={1} aoSamples={32} denoiseSamples={32}/>
+                <SMAA/>
+                <SSAO/>
+                <FXAA/>
+            </EffectComposer>
+            <OrbitControls autoRotate autoRotateSpeed={0.2}/>
         </Canvas>
     );
 }
