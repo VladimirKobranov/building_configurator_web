@@ -1,6 +1,13 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {Suspense, useContext, useEffect, useState} from 'react';
 import {Canvas} from '@react-three/fiber';
-import {AccumulativeShadows, Environment, OrbitControls, PivotControls, SoftShadows} from '@react-three/drei';
+import {
+    AccumulativeShadows,
+    Environment,
+    OrbitControls,
+    PivotControls,
+    SoftShadows,
+    useTexture
+} from '@react-three/drei';
 import {SliderContext} from "./ChakraInit";
 import {Model} from "./Model";
 import {degToRad} from "three/src/math/MathUtils";
@@ -122,12 +129,13 @@ export default function App() {
 
     return (
         <Canvas shadows={'soft'} camera={{position: [50, 25, -50], fov: 30}} gl={{antialias: false}}>
+            <Suspense fallback={null}>
             <SoftShadows samples={64} focus={2} size={1}/>
             <color attach="background" args={["#d0d0d0"]}/>
             <ambientLight intensity={0.3} color={'white'}/>
             <directionalLight
                 position={[25, 25, 25]}
-                intensity={3}
+                intensity={5}
                 castShadow
                 shadow-bias={0.00001}
                 shadow-mapSize-width={8128}
@@ -144,7 +152,7 @@ export default function App() {
                 <ambientLight intensity={0.3} color={'white'}/>
                 <directionalLight
                     position={[25, 25, 25]}
-                    intensity={3}
+                    intensity={5}
                     castShadow
                     shadow-bias={0.00001}
                     shadow-mapSize-width={8128}
@@ -180,6 +188,7 @@ export default function App() {
                 <FXAA/>
             </EffectComposer>
             <OrbitControls autoRotate autoRotateSpeed={0.2}/>
+            </Suspense>
         </Canvas>
     );
 }

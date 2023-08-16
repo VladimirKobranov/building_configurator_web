@@ -1,10 +1,13 @@
 import React from 'react'
-import {useGLTF} from '@react-three/drei'
-import {MeshLambertMaterial} from 'three';
+import {useGLTF, useTexture} from '@react-three/drei'
+import {map} from "maath/buffer";
+import {useLoader} from "@react-three/fiber";
+import {TextureLoader} from "three";
 
 export function Model(props) {
-    const {nodes, materials} = useGLTF('/objects/Window.glb')
-    const lambertMaterial = new MeshLambertMaterial({color: 0xffffff});
+    const {nodes, materials} = useGLTF('/objects/window.glb')
+    const texture = useLoader(TextureLoader, '/objects/map.png')
+    texture.flipY = false;
 
     function selectMesh() {
         let selectedMesh = nodes.Window_0.geometry;
@@ -28,19 +31,18 @@ export function Model(props) {
                 selectedMesh = nodes.Window_2.geometry;
             }
         }
+
         return (selectedMesh)
     }
 
     return (
-        // dispose={null}
         <group {...props}   >
             <mesh receiveShadow castShadow
-                  geometry={selectMesh()}
-                // material={nodes.Window_0.material}
-                  material={lambertMaterial}
-            />
+                  geometry={selectMesh()}>
+                <meshLambertMaterial map={texture}/>
+            </mesh>
         </group>
     )
 }
 
-useGLTF.preload('/objects/Window.glb')
+useGLTF.preload('/objects/window.glb')
