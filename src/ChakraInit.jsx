@@ -11,6 +11,11 @@ function ChakraInit() {
     const [sliderValueY, setSliderValueY] = useState(4);
     const [sliderValueZ, setSliderValueZ] = useState(6);
     const [seed, setSeed] = useState(50);
+    const [doorSide, setDoorSide] = useState('Front');
+    const [doorPosition, setDoorPosition] = useState(2);
+    const [balconyPosition, setBalconyPosition] = useState([1, 3]);
+
+    const [rotateSpeed, setRotateSpeed] = useState(0.2);
 
     return (
         <ChakraProvider>
@@ -22,7 +27,15 @@ function ChakraInit() {
                 sliderValueZ,
                 setSliderValueZ,
                 seed,
-                setSeed
+                setSeed,
+                doorSide,
+                setDoorSide,
+                doorPosition,
+                setDoorPosition,
+                rotateSpeed,
+                setRotateSpeed,
+                balconyPosition,
+                setBalconyPosition
             }}>
                 <Box w='80%' h='100%'>
                     <App/>

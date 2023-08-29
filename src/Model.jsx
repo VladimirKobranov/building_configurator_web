@@ -22,6 +22,8 @@ export function Model(props) {
             selectedMesh = nodes.Ceiling_corner.geometry;
         } else if (props.name === 'Ceiling_cap') {
             selectedMesh = nodes.Ceiling_cap.geometry;
+        } else if (props.name === 'Door_0') {
+            selectedMesh = nodes.Door_0.geometry;
         } else {
             if (props.name === 'Window_0') {
                 selectedMesh = nodes.Window_0.geometry;
@@ -29,6 +31,8 @@ export function Model(props) {
                 selectedMesh = nodes.Window_1.geometry;
             } else if (props.name === 'Window_2') {
                 selectedMesh = nodes.Window_2.geometry;
+            } else if (props.name === 'Window_Balcony_1') {
+                selectedMesh = nodes.Window_Balcony_1.geometry;
             }
         }
 

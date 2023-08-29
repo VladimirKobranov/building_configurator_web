@@ -28,11 +28,19 @@ export default function App() {
     const {sliderValueZ} = useContext(SliderContext);
     const {seed} = useContext(SliderContext);
 
+    const {doorSide} = useContext(SliderContext);
+    const {doorPosition} = useContext(SliderContext);
+    const {balconyPosition} = useContext(SliderContext);
+
+    const {rotateSpeed} = useContext(SliderContext);
+
     const seedRandom = require('seedrandom');
     let generator = seedRandom(seed);
 
+
     const generateGrid = () => {
         const gridData = [];
+        console.log('balcony pos:', balconyPosition);
 
         for (let x = 0.0; x < sliderValueX; x++) {
             for (let y = 0.0; y < sliderValueY + 1; y++) {
@@ -61,8 +69,14 @@ export default function App() {
                             } else {
                                 if (y === sliderValueY) {
                                     mesh = 'Ceiling'
+                                } else if (y === 0 && doorSide === 'Front' && z === doorPosition) {
+                                    mesh = 'Door_0'
                                 } else {
-                                    mesh = `Window_${Math.floor(generator() * 3)}`;
+                                    if (y != 0 && balconyPosition.includes(z)) {
+                                        mesh = 'Window_Balcony_1';
+                                    } else {
+                                        mesh = `Window_${Math.floor(generator() * 3)}`;
+                                    }
                                 }
                             }
                         } else {
@@ -74,6 +88,8 @@ export default function App() {
                                     mesh = 'Corner'
                                 }
                                 z === sliderValueZ - 1 ? angleY = degToRad(0) : angleY = degToRad(90)
+                            } else if (y === 0 && doorSide === 'Back' && z === doorPosition) {
+                                mesh = 'Door_0'
                             } else {
                                 if (y === sliderValueY) {
                                     mesh = 'Ceiling'
@@ -86,6 +102,8 @@ export default function App() {
                         angleY = degToRad(90)
                         if (y === sliderValueY) {
                             mesh = 'Ceiling'
+                        } else if (y === 0 && doorSide === 'Left' && x === doorPosition) {
+                            mesh = 'Door_0'
                         } else {
                             mesh = `Window_${Math.floor(generator() * 3)}`;
                         }
@@ -93,6 +111,8 @@ export default function App() {
                         angleY = degToRad(270)
                         if (y === sliderValueY) {
                             mesh = 'Ceiling'
+                        } else if (y === 0 && doorSide === 'Right' && x === doorPosition) {
+                            mesh = 'Door_0'
                         } else {
                             mesh = `Window_${Math.floor(generator() * 3)}`;
                         }
@@ -125,33 +145,16 @@ export default function App() {
     useEffect(() => {
         generateGrid()
         console.log('updated')
-    }, [sliderValueX, sliderValueY, sliderValueZ, seed]);
+    }, [sliderValueX, sliderValueY, sliderValueZ, seed, doorSide, doorPosition, balconyPosition, rotateSpeed]);
 
     return (
-        <Canvas shadows={'soft'} camera={{position: [50, 25, -50], fov: 30}} gl={{antialias: false}}>
+        <Canvas shadows={'soft'} camera={{position: [-70, 25, -50], fov: 30}} gl={{antialias: false}}>
             <Suspense fallback={null}>
-            <SoftShadows samples={64} focus={2} size={1}/>
-            <color attach="background" args={["#d0d0d0"]}/>
-            <ambientLight intensity={0.3} color={'white'}/>
-            <directionalLight
-                position={[25, 25, 25]}
-                intensity={5}
-                castShadow
-                shadow-bias={0.00001}
-                shadow-mapSize-width={8128}
-                shadow-mapSize-height={8128}
-                shadow-camera-near={0.1}
-                shadow-camera-far={500}
-                shadow-camera-left={-100}
-                shadow-camera-right={100}
-                shadow-camera-top={100}
-                shadow-camera-bottom={-100}
-            />
-            <Environment preset="city"/>
-            <AccumulativeShadows temporal={true} frames={100} scale={100} position={[0, 0.01, 0]} opacity={0.5}>
+                <SoftShadows samples={64} focus={2} size={1}/>
+                <color attach="background" args={["#d0d0d0"]}/>
                 <ambientLight intensity={0.3} color={'white'}/>
                 <directionalLight
-                    position={[25, 25, 25]}
+                    position={[-25, 25, 25]}
                     intensity={5}
                     castShadow
                     shadow-bias={0.00001}
@@ -164,30 +167,47 @@ export default function App() {
                     shadow-camera-top={100}
                     shadow-camera-bottom={-100}
                 />
-            </AccumulativeShadows>
-            <PivotControls activeAxes={[true, true, true]} rotation={[0, 0, 0]} scale={3} anchor={[1, -1, 1]}>
-                {gridData.map((item, index) => (
-                    <Model scale={1} key={index}
-                           name={item.meshType}
-                           position={item.position}
-                           rotation={item.rotation}/>
-                ))}
-            </PivotControls>
-            <mesh receiveShadow castShadow rotation-x={degToRad(-90)}>
-                <planeGeometry args={[100, 100]} rotate={[90, 0, 0]}/>
-                <meshLambertMaterial color="#F2F2F2"/>
-            </mesh>
-            <mesh receiveShadow castShadow position={[10, 2.5, 10]}>
-                <boxGeometry args={[5, 5, 5]}/>
-                <meshLambertMaterial color="white"/>
-            </mesh>
-            <EffectComposer multisampling={10}>
-                <N8AO fullRes color="black" aoRadius={2} intensity={1} aoSamples={32} denoiseSamples={32}/>
-                <SMAA/>
-                <SSAO/>
-                <FXAA/>
-            </EffectComposer>
-            <OrbitControls autoRotate autoRotateSpeed={0.2}/>
+                <Environment preset="city"/>
+                <AccumulativeShadows temporal={true} frames={100} scale={100} position={[0, 0.01, 0]} opacity={0.5}>
+                    <ambientLight intensity={0.3} color={'white'}/>
+                    <directionalLight
+                        position={[-25, 25, 25]}
+                        intensity={5}
+                        castShadow
+                        shadow-bias={0.00001}
+                        shadow-mapSize-width={8128}
+                        shadow-mapSize-height={8128}
+                        shadow-camera-near={0.1}
+                        shadow-camera-far={500}
+                        shadow-camera-left={-100}
+                        shadow-camera-right={100}
+                        shadow-camera-top={100}
+                        shadow-camera-bottom={-100}
+                    />
+                </AccumulativeShadows>
+                <PivotControls activeAxes={[true, true, true]} rotation={[0, 0, 0]} scale={3} anchor={[1, -1, 1]}>
+                    {gridData.map((item, index) => (
+                        <Model scale={1} key={index}
+                               name={item.meshType}
+                               position={item.position}
+                               rotation={item.rotation}/>
+                    ))}
+                </PivotControls>
+                <mesh receiveShadow castShadow rotation-x={degToRad(-90)}>
+                    <planeGeometry args={[100, 100]} rotate={[90, 0, 0]}/>
+                    <meshLambertMaterial color="#F2F2F2"/>
+                </mesh>
+                {/*<mesh receiveShadow castShadow position={[10, 2.5, 10]}>*/}
+                {/*    <boxGeometry args={[5, 5, 5]}/>*/}
+                {/*    <meshLambertMaterial color="white"/>*/}
+                {/*</mesh>*/}
+                <EffectComposer multisampling={10}>
+                    <N8AO fullRes color="black" aoRadius={2} intensity={1} aoSamples={32} denoiseSamples={32}/>
+                    <SMAA/>
+                    <SSAO/>
+                    <FXAA/>
+                </EffectComposer>
+                <OrbitControls autoRotate autoRotateSpeed={rotateSpeed} makeDefault/>
             </Suspense>
         </Canvas>
     );
