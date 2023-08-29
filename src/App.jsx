@@ -1,13 +1,6 @@
 import React, {Suspense, useContext, useEffect, useState} from 'react';
 import {Canvas} from '@react-three/fiber';
-import {
-    AccumulativeShadows,
-    Environment,
-    OrbitControls,
-    PivotControls,
-    SoftShadows,
-    useTexture
-} from '@react-three/drei';
+import {AccumulativeShadows, Environment, OrbitControls, PivotControls, SoftShadows} from '@react-three/drei';
 import {SliderContext} from "./ChakraInit";
 import {Model} from "./Model";
 import {degToRad} from "three/src/math/MathUtils";
@@ -17,6 +10,8 @@ export default function App() {
     const [meshPositions, setMeshPositions] = useState([]);
     const [meshRotations, setMeshRotations] = useState([]);
     const [meshType, setMeshType] = useState([]);
+    const [pipeMeshType, setPipeMeshType] = useState([]);
+    const [aircondMeshType, setAircondMeshType] = useState([]);
     const [gridData, setGridData] = useState([]);
 
     const xTile = 3.0;
@@ -31,6 +26,11 @@ export default function App() {
     const {doorSide} = useContext(SliderContext);
     const {doorPosition} = useContext(SliderContext);
     const {balconyPosition} = useContext(SliderContext);
+    const {balconySide} = useContext(SliderContext);
+
+    const {pipeBool} = useContext(SliderContext);
+    const {airCondBool} = useContext(SliderContext);
+    const {airCondPercentage} = useContext(SliderContext);
 
     const {rotateSpeed} = useContext(SliderContext);
 
@@ -40,7 +40,6 @@ export default function App() {
 
     const generateGrid = () => {
         const gridData = [];
-        console.log('balcony pos:', balconyPosition);
 
         for (let x = 0.0; x < sliderValueX; x++) {
             for (let y = 0.0; y < sliderValueY + 1; y++) {
@@ -54,16 +53,30 @@ export default function App() {
                     let angleY = degToRad(0);
                     let angleZ = degToRad(0);
                     let mesh = 'null';
+                    let pipeMesh = 'null';
+                    let aircondMesh = 'null';
 
                     // main floor
                     if (x === 0 || x === sliderValueX - 1) {
                         if (x === 0) {
-                            angleY = degToRad(180)
+
+                            angleY = degToRad(180) //Front facade
                             if (z === 0 || z === sliderValueZ - 1) {
                                 if (y === sliderValueY) {
                                     mesh = 'Ceiling_corner'
+                                    if (z !== sliderValueZ - 1 && pipeBool) {
+                                        pipeMesh = 'Pipe_2'
+                                    }
+                                } else if (y === 0) {
+                                    mesh = 'Corner'
+                                    if (z !== sliderValueZ - 1 && pipeBool) {
+                                        pipeMesh = 'Pipe_1'
+                                    }
                                 } else {
                                     mesh = 'Corner'
+                                    if (z !== sliderValueZ - 1 && pipeBool) {
+                                        pipeMesh = 'Pipe_0'
+                                    }
                                 }
                                 z === sliderValueZ - 1 ? angleY = degToRad(270) : angleY = degToRad(180)
                             } else {
@@ -72,20 +85,36 @@ export default function App() {
                                 } else if (y === 0 && doorSide === 'Front' && z === doorPosition) {
                                     mesh = 'Door_0'
                                 } else {
-                                    if (y != 0 && balconyPosition.includes(z)) {
-                                        mesh = 'Window_Balcony_1';
+                                    if (y != 0 && balconyPosition.includes(z) && balconySide.includes('Front')) {
+                                        mesh = `Window_balcony_${Math.floor(generator() * 7)}`;
                                     } else {
                                         mesh = `Window_${Math.floor(generator() * 3)}`;
+                                        if (Math.floor(generator() * 100) < airCondPercentage && airCondBool && y !== 0) {
+                                            aircondMesh = `AirCond_${Math.floor(generator() * 3)}`;
+                                        }
+
                                     }
                                 }
                             }
                         } else {
-                            angleY = degToRad(0)
+
+                            angleY = degToRad(0) //Back facade
                             if (z === 0 || z === sliderValueZ - 1) {
                                 if (y === sliderValueY) {
                                     mesh = 'Ceiling_corner'
+                                    if (z !== 0 && pipeBool) {
+                                        pipeMesh = 'Pipe_2'
+                                    }
+                                } else if (y === 0) {
+                                    mesh = 'Corner'
+                                    if (z !== 0 && pipeBool) {
+                                        pipeMesh = 'Pipe_1'
+                                    }
                                 } else {
                                     mesh = 'Corner'
+                                    if (z !== 0 && pipeBool) {
+                                        pipeMesh = 'Pipe_0'
+                                    }
                                 }
                                 z === sliderValueZ - 1 ? angleY = degToRad(0) : angleY = degToRad(90)
                             } else if (y === 0 && doorSide === 'Back' && z === doorPosition) {
@@ -94,29 +123,53 @@ export default function App() {
                                 if (y === sliderValueY) {
                                     mesh = 'Ceiling'
                                 } else {
-                                    mesh = `Window_${Math.floor(generator() * 3)}`;
+                                    if (y != 0 && balconyPosition.includes(z) && balconySide.includes('Back')) {
+                                        mesh = `Window_balcony_${Math.floor(generator() * 7)}`;
+                                    } else {
+                                        mesh = `Window_${Math.floor(generator() * 3)}`;
+                                        if (Math.floor(generator() * 100) < airCondPercentage && airCondBool && y !== 0) {
+                                            aircondMesh = `AirCond_${Math.floor(generator() * 3)}`;
+                                        }
+                                    }
                                 }
                             }
                         }
                     } else if (z === 0) {
-                        angleY = degToRad(90)
+
+                        angleY = degToRad(90) //Left facade
                         if (y === sliderValueY) {
                             mesh = 'Ceiling'
                         } else if (y === 0 && doorSide === 'Left' && x === doorPosition) {
                             mesh = 'Door_0'
                         } else {
-                            mesh = `Window_${Math.floor(generator() * 3)}`;
+                            if (y != 0 && balconyPosition.includes(x) && balconySide.includes('Left')) {
+                                mesh = `Window_balcony_${Math.floor(generator() * 7)}`;
+                            } else {
+                                mesh = `Window_${Math.floor(generator() * 3)}`;
+                                if (Math.floor(generator() * 100) < airCondPercentage && airCondBool && y !== 0) {
+                                    aircondMesh = `AirCond_${Math.floor(generator() * 3)}`;
+                                }
+                            }
                         }
                     } else if (z === sliderValueZ - 1) {
-                        angleY = degToRad(270)
+
+                        angleY = degToRad(270) //Right facade
                         if (y === sliderValueY) {
                             mesh = 'Ceiling'
                         } else if (y === 0 && doorSide === 'Right' && x === doorPosition) {
                             mesh = 'Door_0'
                         } else {
-                            mesh = `Window_${Math.floor(generator() * 3)}`;
+                            if (y != 0 && balconyPosition.includes(x) && balconySide.includes('Right')) {
+                                mesh = `Window_balcony_${Math.floor(generator() * 7)}`;
+                            } else {
+                                mesh = `Window_${Math.floor(generator() * 3)}`;
+                                if (Math.floor(generator() * 100) < airCondPercentage && airCondBool && y !== 0) {
+                                    aircondMesh = `AirCond_${Math.floor(generator() * 3)}`;
+                                }
+                            }
                         }
                     } else {
+                        // Roof cap
                         if (y === sliderValueY) {
                             mesh = 'Ceiling_cap'
                         } else {
@@ -128,7 +181,9 @@ export default function App() {
                     const gridItem = {
                         position: position,
                         rotation: rotation,
-                        meshType: mesh
+                        meshType: mesh,
+                        pipeMeshType: pipeMesh,
+                        aircondMeshType: aircondMesh
                     };
 
                     gridData.push(gridItem);
@@ -137,7 +192,9 @@ export default function App() {
         }
         setMeshPositions(gridData.map(item => item.position));
         setMeshRotations(gridData.map(item => item.rotation));
-        setMeshType(gridData.map(item => item.mesh))
+        setMeshType(gridData.map(item => item.mesh));
+        setPipeMeshType(gridData.map(item => item.pipeMeshType));
+        setAircondMeshType(gridData.map((item => item.aircondMeshType)));
         setGridData(gridData);
         console.log("grid data: ", gridData);
     };
@@ -145,7 +202,7 @@ export default function App() {
     useEffect(() => {
         generateGrid()
         console.log('updated')
-    }, [sliderValueX, sliderValueY, sliderValueZ, seed, doorSide, doorPosition, balconyPosition, rotateSpeed]);
+    }, [sliderValueX, sliderValueY, sliderValueZ, seed, doorSide, doorPosition, balconyPosition, balconySide, pipeBool, airCondBool, airCondPercentage, rotateSpeed]);
 
     return (
         <Canvas shadows={'soft'} camera={{position: [-70, 25, -50], fov: 30}} gl={{antialias: false}}>
@@ -192,15 +249,23 @@ export default function App() {
                                position={item.position}
                                rotation={item.rotation}/>
                     ))}
+                    {gridData.map((item, index) => (
+                        <Model scale={1} key={index}
+                               name={item.pipeMeshType}
+                               position={item.position}
+                               rotation={item.rotation}/>
+                    ))}
+                    {gridData.map((item, index) => (
+                        <Model scale={1} key={index}
+                               name={item.aircondMeshType}
+                               position={item.position}
+                               rotation={item.rotation}/>
+                    ))}
                 </PivotControls>
                 <mesh receiveShadow castShadow rotation-x={degToRad(-90)}>
                     <planeGeometry args={[100, 100]} rotate={[90, 0, 0]}/>
                     <meshLambertMaterial color="#F2F2F2"/>
                 </mesh>
-                {/*<mesh receiveShadow castShadow position={[10, 2.5, 10]}>*/}
-                {/*    <boxGeometry args={[5, 5, 5]}/>*/}
-                {/*    <meshLambertMaterial color="white"/>*/}
-                {/*</mesh>*/}
                 <EffectComposer multisampling={10}>
                     <N8AO fullRes color="black" aoRadius={2} intensity={1} aoSamples={32} denoiseSamples={32}/>
                     <SMAA/>

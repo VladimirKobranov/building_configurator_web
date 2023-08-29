@@ -1,6 +1,5 @@
 import React from 'react'
-import {useGLTF, useTexture} from '@react-three/drei'
-import {map} from "maath/buffer";
+import {useGLTF} from '@react-three/drei'
 import {useLoader} from "@react-three/fiber";
 import {TextureLoader} from "three";
 
@@ -24,17 +23,40 @@ export function Model(props) {
             selectedMesh = nodes.Ceiling_cap.geometry;
         } else if (props.name === 'Door_0') {
             selectedMesh = nodes.Door_0.geometry;
-        } else {
-            if (props.name === 'Window_0') {
-                selectedMesh = nodes.Window_0.geometry;
-            } else if (props.name === 'Window_1') {
-                selectedMesh = nodes.Window_1.geometry;
-            } else if (props.name === 'Window_2') {
-                selectedMesh = nodes.Window_2.geometry;
-            } else if (props.name === 'Window_Balcony_1') {
-                selectedMesh = nodes.Window_Balcony_1.geometry;
-            }
+        } else if (props.name === 'Window_0') {
+            selectedMesh = nodes.Window_0.geometry;
+        } else if (props.name === 'Window_1') {
+            selectedMesh = nodes.Window_1.geometry;
+        } else if (props.name === 'Window_2') {
+            selectedMesh = nodes.Window_2.geometry;
+        } else if (props.name === 'Window_balcony_0') {
+            selectedMesh = nodes.Window_balcony_0.geometry;
+        } else if (props.name === 'Window_balcony_1') {
+            selectedMesh = nodes.Window_balcony_1.geometry;
+        } else if (props.name === 'Window_balcony_2') {
+            selectedMesh = nodes.Window_balcony_2.geometry;
+        } else if (props.name === 'Window_balcony_3') {
+            selectedMesh = nodes.Window_balcony_3.geometry;
+        } else if (props.name === 'Window_balcony_4') {
+            selectedMesh = nodes.Window_balcony_4.geometry;
+        } else if (props.name === 'Window_balcony_5') {
+            selectedMesh = nodes.Window_balcony_5.geometry;
+        } else if (props.name === 'Window_balcony_6') {
+            selectedMesh = nodes.Window_balcony_6.geometry;
+        } else if (props.name === 'Pipe_0') {
+            selectedMesh = nodes.Pipe_0.geometry;
+        } else if (props.name === 'Pipe_1') {
+            selectedMesh = nodes.Pipe_1.geometry;
+        } else if (props.name === 'Pipe_2') {
+            selectedMesh = nodes.Pipe_2.geometry;
+        } else if (props.name === 'AirCond_0') {
+            selectedMesh = nodes.AirCond_0.geometry;
+        } else if (props.name === 'AirCond_1') {
+            selectedMesh = nodes.AirCond_1.geometry;
+        } else if (props.name === 'AirCond_2') {
+            selectedMesh = nodes.AirCond_2.geometry;
         }
+
 
         return (selectedMesh)
     }

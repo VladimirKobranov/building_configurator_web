@@ -14,6 +14,10 @@ function ChakraInit() {
     const [doorSide, setDoorSide] = useState('Front');
     const [doorPosition, setDoorPosition] = useState(2);
     const [balconyPosition, setBalconyPosition] = useState([1, 3]);
+    const [balconySide, setBalconySide] = useState(['Front', 'Back'])
+    const [pipeBool, setPipeBool] = useState(true);
+    const [airCondBool, setAirCondBool] = useState(true);
+    const [airCondPercentage, setAirCondPercentage] = useState(50);
 
     const [rotateSpeed, setRotateSpeed] = useState(0.2);
 
@@ -35,7 +39,15 @@ function ChakraInit() {
                 rotateSpeed,
                 setRotateSpeed,
                 balconyPosition,
-                setBalconyPosition
+                setBalconyPosition,
+                balconySide,
+                setBalconySide,
+                pipeBool,
+                setPipeBool,
+                airCondBool,
+                setAirCondBool,
+                airCondPercentage,
+                setAirCondPercentage
             }}>
                 <Box w='80%' h='100%'>
                     <App/>

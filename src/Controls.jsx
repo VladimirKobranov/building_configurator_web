@@ -2,6 +2,11 @@ import React, {useContext, useEffect, useState} from "react";
 import {
     Box,
     Checkbox,
+    Divider,
+    Heading,
+    Input,
+    Radio,
+    RadioGroup,
     Slider,
     SliderFilledTrack,
     SliderThumb,
@@ -11,10 +16,7 @@ import {
     VStack
 } from "@chakra-ui/react";
 import {SliderContext} from "./ChakraInit";
-import {Radio, RadioGroup} from '@chakra-ui/react'
-import {Input} from '@chakra-ui/react'
-import {Divider} from '@chakra-ui/react'
-import {Heading} from '@chakra-ui/react'
+import Footer from "./Footer";
 
 function Controls() {
     const {sliderValueX, setSliderValueX} = useContext(SliderContext);
@@ -29,6 +31,11 @@ function Controls() {
     const [selectedDoorSide, setSelectedDoorSide] = useState('Front');
 
     const {balconyPosition, setBalconyPosition} = useContext(SliderContext);
+    const {balconySide, setBalconySide} = useContext(SliderContext);
+
+    const {pipeBool, setPipeBool} = useContext(SliderContext);
+    const {airCondBool, setAirCondBool} = useContext(SliderContext);
+    const {airCondPercentage, setAirCondPercentage} = useContext(SliderContext);
 
     function onSliderChangeX(val) {
         setSliderValueX(val)
@@ -63,6 +70,34 @@ function Controls() {
         }
     }
 
+    function onCheckboxChangeBalconySide(checkboxValue, isChecked) {
+        if (isChecked) {
+            setBalconySide(prevBalconySides => [...prevBalconySides, checkboxValue]);
+        } else {
+            setBalconySide(prevBalconySides => prevBalconySides.filter(side => side !== checkboxValue));
+        }
+    }
+
+    function onCheckboxChangePipes(isChecked) {
+        if (isChecked) {
+            setPipeBool(true);
+        } else {
+            setPipeBool(false);
+        }
+    }
+
+    function onCheckboxChangeAirCond(isChecked) {
+        if (isChecked) {
+            setAirCondBool(true);
+        } else {
+            setAirCondBool(false);
+        }
+    }
+
+    function onSliderChangeAirCondPercentage(val) {
+        setAirCondPercentage(val)
+    }
+
     useEffect(() => {
         if (doorSide === 'Front' || doorSide === 'Back') {
             setSelectedDoorSide(sliderValueZ - 2)
@@ -70,7 +105,6 @@ function Controls() {
             setSelectedDoorSide(sliderValueX - 2)
         }
     }, [doorSide, sliderValueX, sliderValueZ]);
-
 
     return (
         <Box
@@ -81,6 +115,7 @@ function Controls() {
             display="flex"
             justifyContent="center"
             alignItems="center"
+            height='auto'
         >
             <VStack w='90%'>
                 <Heading as='h3' size='lg'>
@@ -142,12 +177,35 @@ function Controls() {
 
                 <Text>Balcony sides:</Text>
                 <Stack direction='row'>
-                    <Checkbox defaultChecked>Front</Checkbox>
-                    <Checkbox>Back</Checkbox>
-                    <Checkbox>Left</Checkbox>
-                    <Checkbox>Right</Checkbox>
+                    <Checkbox defaultChecked
+                              onChange={event => onCheckboxChangeBalconySide('Front', event.target.checked)}>Front</Checkbox>
+                    <Checkbox defaultChecked
+                              onChange={event => onCheckboxChangeBalconySide('Back', event.target.checked)}>Back</Checkbox>
+                    <Checkbox
+                        onChange={event => onCheckboxChangeBalconySide('Left', event.target.checked)}>Left</Checkbox>
+                    <Checkbox
+                        onChange={event => onCheckboxChangeBalconySide('Right', event.target.checked)}>Right</Checkbox>
                 </Stack>
 
+                <Text>Accessories:</Text>
+                <Stack direction='row'>
+                    <Checkbox defaultChecked
+                              onChange={event => onCheckboxChangePipes(event.target.checked)}>Pipes</Checkbox>
+                    <Checkbox defaultChecked onChange={event => onCheckboxChangeAirCond(event.target.checked)}>Air
+                        conditioners</Checkbox>
+                </Stack>
+                <Text>Air conditioners percentage: {airCondPercentage}</Text>
+                <Slider defaultValue={airCondPercentage} min={0} max={100} step={1}
+                        onChangeEnd={val => onSliderChangeAirCondPercentage(val)}>
+                    <SliderTrack bg='red.100'>
+                        <Box position='relative' right={10}/>
+                        <SliderFilledTrack bg='tomato'/>
+                    </SliderTrack>
+                    <SliderThumb boxSize={6}/>
+                </Slider>
+
+
+                {/*aditional settings */}
                 <Divider mb='20px' mt='20px'/>
 
                 <Heading as='h4' size='md'>
@@ -174,6 +232,7 @@ function Controls() {
                 </Slider>
 
             </VStack>
+            <Footer/>
         </Box>
     );
 }
