@@ -55,6 +55,24 @@ export function Model(props) {
             selectedMesh = nodes.AirCond_1.geometry;
         } else if (props.name === 'AirCond_2') {
             selectedMesh = nodes.AirCond_2.geometry;
+        } else if (props.name === 'RoofAccessories_0') {
+            selectedMesh = nodes.RoofAccessories_0.geometry;
+        } else if (props.name === 'RoofAccessories_1') {
+            selectedMesh = nodes.RoofAccessories_1.geometry;
+        } else if (props.name === 'RoofAccessories_2') {
+            selectedMesh = nodes.RoofAccessories_2.geometry;
+        } else if (props.name === 'RoofAccessories_3') {
+            selectedMesh = nodes.RoofAccessories_3.geometry;
+        } else if (props.name === 'BalconyAccessories_0') {
+            selectedMesh = nodes.BalconyAccessories_0.geometry;
+        } else if (props.name === 'BalconyAccessories_1') {
+            selectedMesh = nodes.BalconyAccessories_1.geometry;
+        } else if (props.name === 'BalconyAccessories_2') {
+            selectedMesh = nodes.BalconyAccessories_2.geometry;
+        } else if (props.name === 'BalconyAccessories_3') {
+            selectedMesh = nodes.BalconyAccessories_3.geometry;
+        } else if (props.name === 'BalconyAccessories_4') {
+            selectedMesh = nodes.BalconyAccessories_4.geometry;
         }
 
 

@@ -5,6 +5,7 @@ import {SliderContext} from "./ChakraInit";
 import {Model} from "./Model";
 import {degToRad} from "three/src/math/MathUtils";
 import {EffectComposer, FXAA, N8AO, SMAA, SSAO} from "@react-three/postprocessing";
+import {Vector3} from "three";
 
 export default function App() {
     const [meshPositions, setMeshPositions] = useState([]);
@@ -12,6 +13,8 @@ export default function App() {
     const [meshType, setMeshType] = useState([]);
     const [pipeMeshType, setPipeMeshType] = useState([]);
     const [aircondMeshType, setAircondMeshType] = useState([]);
+    const [roofAccessoriesMeshType, setRoofAccessoriesMeshType] = useState([]);
+    const [balconyAccessoriesMeshType, setBalconyAccessoriesMeshType] = useState([]);
     const [gridData, setGridData] = useState([]);
 
     const xTile = 3.0;
@@ -31,12 +34,15 @@ export default function App() {
     const {pipeBool} = useContext(SliderContext);
     const {airCondBool} = useContext(SliderContext);
     const {airCondPercentage} = useContext(SliderContext);
+    const {roofAccessoriesPercentage} = useContext(SliderContext);
+    const {roofAccessoriesBool} = useContext(SliderContext);
+    const {balconyAccessoriesPercentage} = useContext(SliderContext);
+    const {balconyAccessoriesBool} = useContext(SliderContext);
 
     const {rotateSpeed} = useContext(SliderContext);
 
     const seedRandom = require('seedrandom');
     let generator = seedRandom(seed);
-
 
     const generateGrid = () => {
         const gridData = [];
@@ -55,6 +61,8 @@ export default function App() {
                     let mesh = 'null';
                     let pipeMesh = 'null';
                     let aircondMesh = 'null';
+                    let roofAccessoriesMesh = 'null';
+                    let balconyAccessoriesMesh = 'null';
 
                     // main floor
                     if (x === 0 || x === sliderValueX - 1) {
@@ -87,6 +95,9 @@ export default function App() {
                                 } else {
                                     if (y != 0 && balconyPosition.includes(z) && balconySide.includes('Front')) {
                                         mesh = `Window_balcony_${Math.floor(generator() * 7)}`;
+                                        if (Math.floor(generator() * 100 < balconyAccessoriesPercentage && balconyAccessoriesBool)) {
+                                            balconyAccessoriesMesh = `BalconyAccessories_${Math.floor(generator() * 5)}`;
+                                        }
                                     } else {
                                         mesh = `Window_${Math.floor(generator() * 3)}`;
                                         if (Math.floor(generator() * 100) < airCondPercentage && airCondBool && y !== 0) {
@@ -125,6 +136,9 @@ export default function App() {
                                 } else {
                                     if (y != 0 && balconyPosition.includes(z) && balconySide.includes('Back')) {
                                         mesh = `Window_balcony_${Math.floor(generator() * 7)}`;
+                                        if (Math.floor(generator() * 100 < balconyAccessoriesPercentage && balconyAccessoriesBool)) {
+                                            balconyAccessoriesMesh = `BalconyAccessories_${Math.floor(generator() * 5)}`;
+                                        }
                                     } else {
                                         mesh = `Window_${Math.floor(generator() * 3)}`;
                                         if (Math.floor(generator() * 100) < airCondPercentage && airCondBool && y !== 0) {
@@ -144,6 +158,9 @@ export default function App() {
                         } else {
                             if (y != 0 && balconyPosition.includes(x) && balconySide.includes('Left')) {
                                 mesh = `Window_balcony_${Math.floor(generator() * 7)}`;
+                                if (Math.floor(generator() * 100 < balconyAccessoriesPercentage && balconyAccessoriesBool)) {
+                                    balconyAccessoriesMesh = `BalconyAccessories_${Math.floor(generator() * 5)}`;
+                                }
                             } else {
                                 mesh = `Window_${Math.floor(generator() * 3)}`;
                                 if (Math.floor(generator() * 100) < airCondPercentage && airCondBool && y !== 0) {
@@ -161,6 +178,9 @@ export default function App() {
                         } else {
                             if (y != 0 && balconyPosition.includes(x) && balconySide.includes('Right')) {
                                 mesh = `Window_balcony_${Math.floor(generator() * 7)}`;
+                                if (Math.floor(generator() * 100 < balconyAccessoriesPercentage && balconyAccessoriesBool)) {
+                                    balconyAccessoriesMesh = `BalconyAccessories_${Math.floor(generator() * 5)}`;
+                                }
                             } else {
                                 mesh = `Window_${Math.floor(generator() * 3)}`;
                                 if (Math.floor(generator() * 100) < airCondPercentage && airCondBool && y !== 0) {
@@ -172,6 +192,9 @@ export default function App() {
                         // Roof cap
                         if (y === sliderValueY) {
                             mesh = 'Ceiling_cap'
+                            if (Math.floor(generator() * 100) < roofAccessoriesPercentage && roofAccessoriesBool) {
+                                roofAccessoriesMesh = `RoofAccessories_${Math.floor(generator() * 4)}`;
+                            }
                         } else {
                             mesh = 'null'
                         }
@@ -183,7 +206,9 @@ export default function App() {
                         rotation: rotation,
                         meshType: mesh,
                         pipeMeshType: pipeMesh,
-                        aircondMeshType: aircondMesh
+                        aircondMeshType: aircondMesh,
+                        roofAccessoriesMesh: roofAccessoriesMesh,
+                        balconyAccessoriesMesh: balconyAccessoriesMesh,
                     };
 
                     gridData.push(gridItem);
@@ -195,6 +220,8 @@ export default function App() {
         setMeshType(gridData.map(item => item.mesh));
         setPipeMeshType(gridData.map(item => item.pipeMeshType));
         setAircondMeshType(gridData.map((item => item.aircondMeshType)));
+        setRoofAccessoriesMeshType(gridData.map((item => item.roofAccessoriesMeshType)));
+        setBalconyAccessoriesMeshType(gridData.map((item => item.balconyAccessoriesMeshType)));
         setGridData(gridData);
         console.log("grid data: ", gridData);
     };
@@ -202,10 +229,10 @@ export default function App() {
     useEffect(() => {
         generateGrid()
         console.log('updated')
-    }, [sliderValueX, sliderValueY, sliderValueZ, seed, doorSide, doorPosition, balconyPosition, balconySide, pipeBool, airCondBool, airCondPercentage, rotateSpeed]);
+    }, [sliderValueX, sliderValueY, sliderValueZ, seed, doorSide, doorPosition, balconyPosition, balconySide, pipeBool, airCondBool, airCondPercentage, rotateSpeed, roofAccessoriesPercentage, roofAccessoriesBool, balconyAccessoriesPercentage, balconyAccessoriesBool]);
 
     return (
-        <Canvas shadows={'soft'} camera={{position: [-70, 25, -50], fov: 30}} gl={{antialias: false}}>
+        <Canvas shadows={'soft'} camera={{position: [-50, 20, -40], fov: 30}} gl={{antialias: false}}>
             <Suspense fallback={null}>
                 <SoftShadows samples={64} focus={2} size={1}/>
                 <color attach="background" args={["#d0d0d0"]}/>
@@ -242,26 +269,38 @@ export default function App() {
                         shadow-camera-bottom={-100}
                     />
                 </AccumulativeShadows>
-                <PivotControls activeAxes={[true, true, true]} rotation={[0, 0, 0]} scale={3} anchor={[1, -1, 1]}>
-                    {gridData.map((item, index) => (
-                        <Model scale={1} key={index}
-                               name={item.meshType}
-                               position={item.position}
-                               rotation={item.rotation}/>
-                    ))}
-                    {gridData.map((item, index) => (
-                        <Model scale={1} key={index}
-                               name={item.pipeMeshType}
-                               position={item.position}
-                               rotation={item.rotation}/>
-                    ))}
-                    {gridData.map((item, index) => (
-                        <Model scale={1} key={index}
-                               name={item.aircondMeshType}
-                               position={item.position}
-                               rotation={item.rotation}/>
-                    ))}
-                </PivotControls>
+                {/*<PivotControls activeAxes={[true, true, true]} rotation={[0, 0, 0]} scale={3} anchor={[1, -1, 1]}>*/}
+                {gridData.map((item, index) => (
+                    <Model scale={1} key={index}
+                           name={item.meshType}
+                           position={item.position}
+                           rotation={item.rotation}/>
+                ))}
+                {gridData.map((item, index) => (
+                    <Model scale={1} key={index}
+                           name={item.pipeMeshType}
+                           position={item.position}
+                           rotation={item.rotation}/>
+                ))}
+                {gridData.map((item, index) => (
+                    <Model scale={1} key={index}
+                           name={item.aircondMeshType}
+                           position={item.position}
+                           rotation={item.rotation}/>
+                ))}
+                {gridData.map((item, index) => (
+                    <Model scale={1} key={index}
+                           name={item.roofAccessoriesMesh}
+                           position={item.position}
+                           rotation={item.rotation}/>
+                ))}
+                {gridData.map((item, index) => (
+                    <Model scale={1} key={index}
+                           name={item.balconyAccessoriesMesh}
+                           position={item.position}
+                           rotation={item.rotation}/>
+                ))}
+                {/*</PivotControls>*/}
                 <mesh receiveShadow castShadow rotation-x={degToRad(-90)}>
                     <planeGeometry args={[100, 100]} rotate={[90, 0, 0]}/>
                     <meshLambertMaterial color="#F2F2F2"/>
@@ -272,7 +311,7 @@ export default function App() {
                     <SSAO/>
                     <FXAA/>
                 </EffectComposer>
-                <OrbitControls autoRotate autoRotateSpeed={rotateSpeed} makeDefault/>
+                <OrbitControls autoRotate autoRotateSpeed={rotateSpeed} target={[5, 5, 5]} makeDefault/>
             </Suspense>
         </Canvas>
     );

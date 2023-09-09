@@ -7,6 +7,7 @@ import {
     Input,
     Radio,
     RadioGroup,
+    SimpleGrid,
     Slider,
     SliderFilledTrack,
     SliderThumb,
@@ -36,6 +37,10 @@ function Controls() {
     const {pipeBool, setPipeBool} = useContext(SliderContext);
     const {airCondBool, setAirCondBool} = useContext(SliderContext);
     const {airCondPercentage, setAirCondPercentage} = useContext(SliderContext);
+    const {roofAccessoriesPercentage, setRoofAccessoriesPercentage} = useContext(SliderContext);
+    const {roofAccessoriesBool, setRoofAccessoriesBool} = useContext(SliderContext);
+    const {balconyAccessoriesPercentage, setBalconyAccessoriesPercentage} = useContext(SliderContext);
+    const {balconyAccessoriesBool, setBalconyAccessoriesBool} = useContext(SliderContext);
 
     function onSliderChangeX(val) {
         setSliderValueX(val)
@@ -96,6 +101,30 @@ function Controls() {
 
     function onSliderChangeAirCondPercentage(val) {
         setAirCondPercentage(val)
+    }
+
+    function onCheckboxChangeRoofAccessories(isChecked) {
+        if (isChecked) {
+            setRoofAccessoriesBool(true);
+        } else {
+            setRoofAccessoriesBool(false);
+        }
+    }
+
+    function onSliderChangeRoofAccessoriesPercentage(val) {
+        setRoofAccessoriesPercentage(val)
+    }
+
+    function onCheckboxChangeBalconyAccessories(isChecked) {
+        if (isChecked) {
+            setBalconyAccessoriesBool(true);
+        } else {
+            setBalconyAccessoriesBool(false);
+        }
+    }
+
+    function onSliderChangeBalconyAccessoriesPercentage(val) {
+        setBalconyAccessoriesPercentage(val)
     }
 
     useEffect(() => {
@@ -188,15 +217,38 @@ function Controls() {
                 </Stack>
 
                 <Text>Accessories:</Text>
-                <Stack direction='row'>
+                <SimpleGrid columns={2} spacing={2}>
                     <Checkbox defaultChecked
                               onChange={event => onCheckboxChangePipes(event.target.checked)}>Pipes</Checkbox>
                     <Checkbox defaultChecked onChange={event => onCheckboxChangeAirCond(event.target.checked)}>Air
                         conditioners</Checkbox>
-                </Stack>
+                    <Checkbox defaultChecked onChange={event => onCheckboxChangeRoofAccessories(event.target.checked)}>Roof
+                        accessories</Checkbox>
+                    <Checkbox defaultChecked
+                              onChange={event => onCheckboxChangeBalconyAccessories(event.target.checked)}>Balcony
+                        accessories</Checkbox>
+                </SimpleGrid>
                 <Text>Air conditioners percentage: {airCondPercentage}</Text>
                 <Slider defaultValue={airCondPercentage} min={0} max={100} step={1}
                         onChangeEnd={val => onSliderChangeAirCondPercentage(val)}>
+                    <SliderTrack bg='red.100'>
+                        <Box position='relative' right={10}/>
+                        <SliderFilledTrack bg='tomato'/>
+                    </SliderTrack>
+                    <SliderThumb boxSize={6}/>
+                </Slider>
+                <Text>Roof accessories percentage: {roofAccessoriesPercentage}</Text>
+                <Slider defaultValue={roofAccessoriesPercentage} min={0} max={100} step={1}
+                        onChangeEnd={val => onSliderChangeRoofAccessoriesPercentage(val)}>
+                    <SliderTrack bg='red.100'>
+                        <Box position='relative' right={10}/>
+                        <SliderFilledTrack bg='tomato'/>
+                    </SliderTrack>
+                    <SliderThumb boxSize={6}/>
+                </Slider>
+                <Text>Balcony accessories percentage: {balconyAccessoriesPercentage}</Text>
+                <Slider defaultValue={balconyAccessoriesPercentage} min={0} max={100} step={1}
+                        onChangeEnd={val => onSliderChangeBalconyAccessoriesPercentage(val)}>
                     <SliderTrack bg='red.100'>
                         <Box position='relative' right={10}/>
                         <SliderFilledTrack bg='tomato'/>

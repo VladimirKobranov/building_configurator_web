@@ -8,16 +8,20 @@ export const SliderContext = createContext();
 
 function ChakraInit() {
     const [sliderValueX, setSliderValueX] = useState(5);
-    const [sliderValueY, setSliderValueY] = useState(4);
-    const [sliderValueZ, setSliderValueZ] = useState(6);
+    const [sliderValueY, setSliderValueY] = useState(5);
+    const [sliderValueZ, setSliderValueZ] = useState(8);
     const [seed, setSeed] = useState(50);
     const [doorSide, setDoorSide] = useState('Front');
     const [doorPosition, setDoorPosition] = useState(2);
-    const [balconyPosition, setBalconyPosition] = useState([1, 3]);
+    const [balconyPosition, setBalconyPosition] = useState([1, 3, 4, 6]);
     const [balconySide, setBalconySide] = useState(['Front', 'Back'])
     const [pipeBool, setPipeBool] = useState(true);
     const [airCondBool, setAirCondBool] = useState(true);
-    const [airCondPercentage, setAirCondPercentage] = useState(50);
+    const [airCondPercentage, setAirCondPercentage] = useState(25);
+    const [roofAccessoriesBool, setRoofAccessoriesBool] = useState(true);
+    const [roofAccessoriesPercentage, setRoofAccessoriesPercentage] = useState(10);
+    const [balconyAccessoriesPercentage, setBalconyAccessoriesPercentage] = useState(20);
+    const [balconyAccessoriesBool, setBalconyAccessoriesBool] = useState(true);
 
     const [rotateSpeed, setRotateSpeed] = useState(0.2);
 
@@ -47,7 +51,15 @@ function ChakraInit() {
                 airCondBool,
                 setAirCondBool,
                 airCondPercentage,
-                setAirCondPercentage
+                setAirCondPercentage,
+                roofAccessoriesBool,
+                setRoofAccessoriesBool,
+                roofAccessoriesPercentage,
+                setRoofAccessoriesPercentage,
+                balconyAccessoriesPercentage,
+                setBalconyAccessoriesPercentage,
+                balconyAccessoriesBool,
+                setBalconyAccessoriesBool
             }}>
                 <Box w='80%' h='100%'>
                     <App/>
