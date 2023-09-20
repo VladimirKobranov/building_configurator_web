@@ -190,7 +190,9 @@ function Controls() {
                 </RadioGroup>
 
                 <Text>Door position: {doorPosition}</Text>
-                <Slider defaultValue={doorPosition} min={1} max={selectedDoorSide} step={1}
+                <Slider defaultValue={doorPosition} min={1}
+                        max={doorSide === 'Front' || doorSide === 'Back' ? sliderValueZ - 2 : sliderValueX - 2} step={1}
+                        step={1}
                         onChangeEnd={val => onSliderChangeDoorPosition(val)}>
                     <SliderTrack bg='red.100'>
                         <Box position='relative' right={10}/>
