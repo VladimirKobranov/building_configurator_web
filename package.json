@@ -1,7 +1,7 @@
 {
   "name": "three_js",
   "version": "0.1.0",
-  "homepage": "https://vladimirkobranov.github.io/building_configurator_web/",
+  "homepage": "https://vladimirkobranov.github.io/building_configurator_web",
   "private": true,
   "dependencies": {
     "@chakra-ui/react": "^2.8.0",
