@@ -12,8 +12,8 @@ function Loader() {
     const {progress} = useProgress()
     return (
         <Html center>
-            <CircularProgress value={progress} color='tomato' size='70px' thickness='8px'>
-                <CircularProgressLabel>{progress}%</CircularProgressLabel>
+            <CircularProgress value={Math.floor(progress)} color='tomato' size='70px' thickness='8px'>
+                <CircularProgressLabel>{Math.floor(progress)}%</CircularProgressLabel>
             </CircularProgress>
             <Text>
                 Loading...
