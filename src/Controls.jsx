@@ -153,7 +153,7 @@ function Controls() {
 
                 <Box w='full' mb='10px'>
                     <Text align='center'>Depth number: {sliderValueX}</Text>
-                    <Slider defaultValue={sliderValueX} min={0} max={20} step={1}
+                    <Slider defaultValue={sliderValueX} min={0} max={12} step={1}
                             onChangeEnd={val => onSliderChangeX(val)}>
                         <SliderTrack bg='red.100'>
                             <Box position='relative' right={10}/>
@@ -163,7 +163,7 @@ function Controls() {
                     </Slider>
 
                     <Text align='center'>Height number: {sliderValueY}</Text>
-                    <Slider defaultValue={sliderValueY} min={0} max={20} step={1}
+                    <Slider defaultValue={sliderValueY} min={0} max={12} step={1}
                             onChangeEnd={val => onSliderChangeY(val)}>
                         <SliderTrack bg='red.100'>
                             <Box position='relative' right={10}/>
@@ -173,7 +173,7 @@ function Controls() {
                     </Slider>
 
                     <Text align='center'>Width number: {sliderValueZ}</Text>
-                    <Slider defaultValue={sliderValueZ} min={0} max={20} step={1}
+                    <Slider defaultValue={sliderValueZ} min={0} max={12} step={1}
                             onChangeEnd={val => onSliderChangeZ(val)}>
                         <SliderTrack bg='red.100'>
                             <Box position='relative' right={10}/>

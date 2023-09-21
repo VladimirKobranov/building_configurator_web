@@ -7,6 +7,7 @@ import {degToRad} from "three/src/math/MathUtils";
 import {EffectComposer, FXAA, N8AO, SMAA, SSAO} from "@react-three/postprocessing";
 import {CircularProgress, CircularProgressLabel, Text} from "@chakra-ui/react";
 
+
 function Loader() {
     const {progress} = useProgress()
     return (
@@ -246,9 +247,9 @@ export default function App() {
     }, [sliderValueX, sliderValueY, sliderValueZ, seed, doorSide, doorPosition, balconyPosition, balconySide, pipeBool, airCondBool, airCondPercentage, rotateSpeed, roofAccessoriesPercentage, roofAccessoriesBool, balconyAccessoriesPercentage, balconyAccessoriesBool]);
 
     return (
-        <Canvas shadows={'soft'} camera={{position: [-50, 20, -40], fov: 30}} gl={{antialias: false}}>
+        <Canvas shadows={'basic'} camera={{position: [-50, 20, -40], fov: 30}} gl={{antialias: false}}>
             <Suspense fallback={<Loader/>}>
-                <SoftShadows samples={64} focus={2} size={1}/>
+                <SoftShadows samples={8} focus={2} size={2}/>
                 <color attach="background" args={["#d0d0d0"]}/>
                 <ambientLight intensity={0.3} color={'white'}/>
                 <directionalLight
@@ -256,8 +257,8 @@ export default function App() {
                     intensity={5}
                     castShadow
                     shadow-bias={0.00001}
-                    shadow-mapSize-width={8128}
-                    shadow-mapSize-height={8128}
+                    shadow-mapSize-width={2048}
+                    shadow-mapSize-height={2048}
                     shadow-camera-near={0.1}
                     shadow-camera-far={500}
                     shadow-camera-left={-100}
