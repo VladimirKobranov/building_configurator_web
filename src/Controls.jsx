@@ -147,39 +147,43 @@ function Controls() {
             height='auto'
         >
             <VStack w='90%'>
-                <Heading as='h3' size='lg'>
+                <Heading as='h3' size='lg' mb='10px'>
                     Configurator
                 </Heading>
 
-                <Text>Depth number: {sliderValueX}</Text>
-                <Slider defaultValue={sliderValueX} min={0} max={20} step={1} onChangeEnd={val => onSliderChangeX(val)}>
-                    <SliderTrack bg='red.100'>
-                        <Box position='relative' right={10}/>
-                        <SliderFilledTrack bg='tomato'/>
-                    </SliderTrack>
-                    <SliderThumb boxSize={6}/>
-                </Slider>
+                <Box w='full' mb='10px'>
+                    <Text align='center'>Depth number: {sliderValueX}</Text>
+                    <Slider defaultValue={sliderValueX} min={0} max={20} step={1}
+                            onChangeEnd={val => onSliderChangeX(val)}>
+                        <SliderTrack bg='red.100'>
+                            <Box position='relative' right={10}/>
+                            <SliderFilledTrack bg='tomato'/>
+                        </SliderTrack>
+                        <SliderThumb boxSize={6}/>
+                    </Slider>
 
-                <Text>Height number: {sliderValueY}</Text>
-                <Slider defaultValue={sliderValueY} min={0} max={20} step={1} onChangeEnd={val => onSliderChangeY(val)}>
-                    <SliderTrack bg='red.100'>
-                        <Box position='relative' right={10}/>
-                        <SliderFilledTrack bg='tomato'/>
-                    </SliderTrack>
-                    <SliderThumb boxSize={6}/>
-                </Slider>
+                    <Text align='center'>Height number: {sliderValueY}</Text>
+                    <Slider defaultValue={sliderValueY} min={0} max={20} step={1}
+                            onChangeEnd={val => onSliderChangeY(val)}>
+                        <SliderTrack bg='red.100'>
+                            <Box position='relative' right={10}/>
+                            <SliderFilledTrack bg='tomato'/>
+                        </SliderTrack>
+                        <SliderThumb boxSize={6}/>
+                    </Slider>
 
-                <Text>Width number: {sliderValueZ}</Text>
-                <Slider defaultValue={sliderValueZ} min={0} max={20} step={1} onChangeEnd={val => onSliderChangeZ(val)}>
-                    <SliderTrack bg='red.100'>
-                        <Box position='relative' right={10}/>
-                        <SliderFilledTrack bg='tomato'/>
-                    </SliderTrack>
-                    <SliderThumb boxSize={6}/>
-                </Slider>
+                    <Text align='center'>Width number: {sliderValueZ}</Text>
+                    <Slider defaultValue={sliderValueZ} min={0} max={20} step={1}
+                            onChangeEnd={val => onSliderChangeZ(val)}>
+                        <SliderTrack bg='red.100'>
+                            <Box position='relative' right={10}/>
+                            <SliderFilledTrack bg='tomato'/>
+                        </SliderTrack>
+                        <SliderThumb boxSize={6}/>
+                    </Slider>
+                </Box>
 
-
-                <Text>Entrance door side:</Text>
+                <Text fontSize='18px' fontWeight='600'>Entrance door side:</Text>
                 <RadioGroup onChange={setDoorSide} value={doorSide}>
                     <Stack direction='row' spacing='20px'>
                         <Radio value='Front'>Front</Radio>
@@ -189,7 +193,7 @@ function Controls() {
                     </Stack>
                 </RadioGroup>
 
-                <Text>Door position: {doorPosition}</Text>
+                <Text fontSize='18px' fontWeight='600'>Door position: {doorPosition}</Text>
                 <Slider defaultValue={doorPosition} min={1}
                         max={doorSide === 'Front' || doorSide === 'Back' ? sliderValueZ - 2 : sliderValueX - 2} step={1}
                         step={1}
@@ -201,12 +205,12 @@ function Controls() {
                     <SliderThumb boxSize={6}/>
                 </Slider>
 
-                <Text>Balcony positions:</Text>
+                <Text fontSize='18px' fontWeight='600'>Balcony positions:</Text>
                 <Input placeholder={`enter numbers with comma: ${balconyPosition.join(', ')}`}
                        onBlur={event => onInputChangeBalconyPositions(event.target.value)}/>
 
 
-                <Text>Balcony sides:</Text>
+                <Text fontSize='18px' fontWeight='600'>Balcony sides:</Text>
                 <Stack direction='row'>
                     <Checkbox defaultChecked
                               onChange={event => onCheckboxChangeBalconySide('Front', event.target.checked)}>Front</Checkbox>
@@ -218,19 +222,22 @@ function Controls() {
                         onChange={event => onCheckboxChangeBalconySide('Right', event.target.checked)}>Right</Checkbox>
                 </Stack>
 
-                <Text>Accessories:</Text>
+                <Text fontSize='18px' fontWeight='600'>Accessories:</Text>
                 <SimpleGrid columns={2} spacing={2}>
                     <Checkbox defaultChecked
-                              onChange={event => onCheckboxChangePipes(event.target.checked)}>Pipes</Checkbox>
+                              onChange={event => onCheckboxChangePipes(event.target.checked)}>Flood pipes</Checkbox>
                     <Checkbox defaultChecked onChange={event => onCheckboxChangeAirCond(event.target.checked)}>Air
                         conditioners</Checkbox>
                     <Checkbox defaultChecked onChange={event => onCheckboxChangeRoofAccessories(event.target.checked)}>Roof
-                        accessories</Checkbox>
+                        stuff
+                    </Checkbox>
                     <Checkbox defaultChecked
                               onChange={event => onCheckboxChangeBalconyAccessories(event.target.checked)}>Balcony
-                        accessories</Checkbox>
+                        gardens
+                    </Checkbox>
                 </SimpleGrid>
-                <Text>Air conditioners percentage: {airCondPercentage}</Text>
+                <Text fontSize='18px' fontWeight='600'>Percentages:</Text>
+                <Text>Air conditioners: {airCondPercentage}</Text>
                 <Slider defaultValue={airCondPercentage} min={0} max={100} step={1}
                         onChangeEnd={val => onSliderChangeAirCondPercentage(val)}>
                     <SliderTrack bg='red.100'>
@@ -239,7 +246,7 @@ function Controls() {
                     </SliderTrack>
                     <SliderThumb boxSize={6}/>
                 </Slider>
-                <Text>Roof accessories percentage: {roofAccessoriesPercentage}</Text>
+                <Text>Roof accessories: {roofAccessoriesPercentage}</Text>
                 <Slider defaultValue={roofAccessoriesPercentage} min={0} max={100} step={1}
                         onChangeEnd={val => onSliderChangeRoofAccessoriesPercentage(val)}>
                     <SliderTrack bg='red.100'>
@@ -248,7 +255,7 @@ function Controls() {
                     </SliderTrack>
                     <SliderThumb boxSize={6}/>
                 </Slider>
-                <Text>Balcony accessories percentage: {balconyAccessoriesPercentage}</Text>
+                <Text>Balcony accessories: {balconyAccessoriesPercentage}</Text>
                 <Slider defaultValue={balconyAccessoriesPercentage} min={0} max={100} step={1}
                         onChangeEnd={val => onSliderChangeBalconyAccessoriesPercentage(val)}>
                     <SliderTrack bg='red.100'>

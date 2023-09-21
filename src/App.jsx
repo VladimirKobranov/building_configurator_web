@@ -1,11 +1,25 @@
 import React, {Suspense, useContext, useEffect, useState} from 'react';
 import {Canvas} from '@react-three/fiber';
-import {AccumulativeShadows, Environment, OrbitControls, PivotControls, SoftShadows} from '@react-three/drei';
+import {Environment, Html, OrbitControls, SoftShadows, useProgress} from '@react-three/drei';
 import {SliderContext} from "./ChakraInit";
 import {Model} from "./Model";
 import {degToRad} from "three/src/math/MathUtils";
 import {EffectComposer, FXAA, N8AO, SMAA, SSAO} from "@react-three/postprocessing";
-import {Vector3} from "three";
+import {CircularProgress, CircularProgressLabel, Text} from "@chakra-ui/react";
+
+function Loader() {
+    const {progress} = useProgress()
+    return (
+        <Html center>
+            <CircularProgress value={progress} color='tomato' size='70px' thickness='8px'>
+                <CircularProgressLabel>{progress}%</CircularProgressLabel>
+            </CircularProgress>
+            <Text>
+                Loading...
+            </Text>
+        </Html>
+    )
+}
 
 export default function App() {
     const [meshPositions, setMeshPositions] = useState([]);
@@ -233,7 +247,7 @@ export default function App() {
 
     return (
         <Canvas shadows={'soft'} camera={{position: [-50, 20, -40], fov: 30}} gl={{antialias: false}}>
-            <Suspense fallback={null}>
+            <Suspense fallback={<Loader/>}>
                 <SoftShadows samples={64} focus={2} size={1}/>
                 <color attach="background" args={["#d0d0d0"]}/>
                 <ambientLight intensity={0.3} color={'white'}/>
@@ -252,23 +266,23 @@ export default function App() {
                     shadow-camera-bottom={-100}
                 />
                 <Environment preset="city"/>
-                <AccumulativeShadows temporal={true} frames={100} scale={100} position={[0, 0.01, 0]} opacity={0.5}>
-                    <ambientLight intensity={0.3} color={'white'}/>
-                    <directionalLight
-                        position={[-25, 25, 25]}
-                        intensity={5}
-                        castShadow
-                        shadow-bias={0.00001}
-                        shadow-mapSize-width={8128}
-                        shadow-mapSize-height={8128}
-                        shadow-camera-near={0.1}
-                        shadow-camera-far={500}
-                        shadow-camera-left={-100}
-                        shadow-camera-right={100}
-                        shadow-camera-top={100}
-                        shadow-camera-bottom={-100}
-                    />
-                </AccumulativeShadows>
+                {/*<AccumulativeShadows temporal={true} frames={100} scale={100} position={[0, 0.01, 0]} opacity={0.5}>*/}
+                {/*    <ambientLight intensity={0.3} color={'white'}/>*/}
+                {/*    <directionalLight*/}
+                {/*        position={[-25, 25, 25]}*/}
+                {/*        intensity={5}*/}
+                {/*        castShadow*/}
+                {/*        shadow-bias={0.00001}*/}
+                {/*        shadow-mapSize-width={8128}*/}
+                {/*        shadow-mapSize-height={8128}*/}
+                {/*        shadow-camera-near={0.1}*/}
+                {/*        shadow-camera-far={500}*/}
+                {/*        shadow-camera-left={-100}*/}
+                {/*        shadow-camera-right={100}*/}
+                {/*        shadow-camera-top={100}*/}
+                {/*        shadow-camera-bottom={-100}*/}
+                {/*    />*/}
+                {/*</AccumulativeShadows>*/}
                 {/*<PivotControls activeAxes={[true, true, true]} rotation={[0, 0, 0]} scale={3} anchor={[1, -1, 1]}>*/}
                 {gridData.map((item, index) => (
                     <Model scale={1} key={index}

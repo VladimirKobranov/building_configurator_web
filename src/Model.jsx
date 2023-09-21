@@ -4,8 +4,8 @@ import {useLoader} from "@react-three/fiber";
 import {TextureLoader} from "three";
 
 export function Model(props) {
-    const {nodes, materials} = useGLTF('/objects/window.glb')
-    const texture = useLoader(TextureLoader, '/objects/map.png')
+    const {nodes} = useGLTF(process.env.PUBLIC_URL + '/objects/window.glb')
+    const texture = useLoader(TextureLoader, process.env.PUBLIC_URL + '/objects/map.png')
     texture.flipY = false;
 
     function selectMesh() {
@@ -74,8 +74,6 @@ export function Model(props) {
         } else if (props.name === 'BalconyAccessories_4') {
             selectedMesh = nodes.BalconyAccessories_4.geometry;
         }
-
-
         return (selectedMesh)
     }
 
@@ -89,4 +87,4 @@ export function Model(props) {
     )
 }
 
-useGLTF.preload('/objects/window.glb')
+useGLTF.preload(process.env.PUBLIC_URL + '/objects/window.glb')
