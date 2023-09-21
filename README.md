@@ -8,7 +8,7 @@
 <sub>version 0.9</sub>
 
 ## Info:
-Web building configurator made with `React`,`Fiber`,`Drei`.
+Web building configurator made with `React`,`Threejs`,`Fiber`,`Drei`.
 
 **List of possibilities:**
 - Length, width, height
