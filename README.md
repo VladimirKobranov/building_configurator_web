@@ -2,7 +2,6 @@
 
 `PANELKA`
 
----
 
 #### The app link: [Configurator](https://vladimirkobranov.github.io/building_configurator_web/)
 <sub>version 0.9</sub>
@@ -27,4 +26,4 @@ Web building configurator made with `React`,`Threejs`,`Fiber`,`Drei`.
 
 ### References:
 
-* Art style: from [Nastya Zhenunk](https://www.artstation.com/artwork/m8ZPZv)
+* Art style and idea: [Nastya Zhenunk](https://www.artstation.com/artwork/m8ZPZv)
