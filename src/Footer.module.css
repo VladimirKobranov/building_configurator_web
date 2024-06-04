@@ -1,19 +1,20 @@
 .footer {
-    position: absolute;
-    width: 104px;
-    height: 18px;
-    bottom: -50px;
-    font-family: 'Roboto', sans-serif;
+  position: absolute;
+  width: 104px;
+  height: 18px;
+  bottom: -50px;
+  font-family: "Roboto", sans-serif;
 
-    font-style: normal;
-    font-weight: 300;
-    font-size: 15px;
-    line-height: 18px;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 18px;
 
-    display: flex;
-    align-items: center;
-    text-align: center;
-    font-variant: all-small-caps;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  font-variant: all-small-caps;
 
-    color: #868686;
+  color: #868686;
 }
+

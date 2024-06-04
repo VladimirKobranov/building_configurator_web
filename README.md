@@ -2,14 +2,16 @@
 
 `PANELKA`
 
-
 #### The app link: [Configurator](https://vladimirkobranov.github.io/building_configurator_web/)
+
 <sub>version 0.9</sub>
 
-## Info:
+## Info
+
 Web building configurator made with `React`,`Threejs`,`Fiber`,`Drei`.
 
 **List of possibilities:**
+
 - Length, width, height
 - Entrance door position and location
 - Balcony sides and locations
@@ -20,10 +22,11 @@ Web building configurator made with `React`,`Threejs`,`Fiber`,`Drei`.
 ---
 
 ![pic_1](pics/pic_1.png)
+
 <p align="center">
 <sub >pic 1</sub>
 </p>
 
-### References:
+### References
 
-* Art style and idea: [Nastya Zhenunk](https://www.artstation.com/artwork/m8ZPZv)
+- Art style and idea: [Nastya Zhenunk](https://www.artstation.com/artwork/m8ZPZv)
