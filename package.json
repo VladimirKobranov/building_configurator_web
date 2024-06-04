@@ -4,6 +4,7 @@
   "homepage": "https://vladimirkobranov.github.io/building_configurator_web",
   "private": true,
   "dependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@chakra-ui/react": "^2.8.0",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
@@ -52,6 +53,10 @@
     ]
   },
   "devDependencies": {
+    "@babel/core": "7.22.5",
+    "@babel/eslint-parser": "7.22.5",
+    "@babel/plugin-transform-private-property-in-object": "^7.23.3",
+    "@babel/preset-env": "7.22.5",
     "gh-pages": "^6.0.0",
     "vite": "5.0.5"
   }
